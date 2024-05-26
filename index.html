@@ -1,0 +1,239 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Calcolatrice 2.0" />
+    <meta name="keywords" content="HTML, CSS, JavaScript, Calcolatrice" />
+    <meta name="author" content="Vincenzo" />
+    <meta name="robots" content="index, follow" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+    <title>Calcolatrice 2.0</title>
+</head>
+
+<!-- style -->
+<style>
+    body {
+        font-family: "Helvetica Neue", sans-serif;
+        background: url('https://images.pexels.com/photos/3729557/pexels-photo-3729557.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        height: auto;
+    }
+
+    .container {
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        color: white;
+        padding: 20px;
+        margin-top: 50px;
+    }
+
+    .calcolatrice {
+        background: black;
+        border-radius: 50px;
+        color: white;
+        height: 460px;
+        width: 340px;
+        padding: 20px;
+        margin: 0 auto;
+        box-shadow: 0 0 10px white;
+    }
+
+    .display {
+        background: #333;
+        border-radius: 20px;
+        color: white;
+        height: 100px;
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        text-align: right;
+        font-size: 18px;
+    }
+
+    #schermo {
+        width: 100%;
+        padding: 10px;
+        text-align: right;
+        font-size: 24px;
+        border: none;
+        outline: none;
+        background: transparent;
+        color: white;
+        margin-bottom: 40px;
+    }
+
+    .buttonNumeri {
+        align-items: center;
+        background: #333;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        font-size: 18px;
+        height: 50px;
+        justify-content: center;
+        width: 55px;
+        color: white;
+    }
+
+    #addizione,
+    #divisione,
+    #moltiplicazione,
+    #sottrazione {
+        background: orange;
+        color: white;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 18px;
+        height: 50px;
+        justify-content: center;
+        width: 55px;
+    }
+
+    #reset,
+    #uguale {
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 18px;
+        height: 50px;
+        justify-content: center;
+        width: 55px;
+    }
+</style>
+
+<body>
+    <div class="container">
+        <h1 class="text-center mt-4">Calcolatrice 2.0</h1>
+        <div class="calcolatrice mt-4">
+            <div class="display">
+                <p id="espressione"></p>
+                <input id="schermo" readonly>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button class="buttonNumeri" onclick="mostra('7')">7</button>
+                </div>
+                <div class="col">
+                    <button class="buttonNumeri" onclick="mostra('8')">8</button>
+                </div>
+                <div class="col">
+                    <button class="buttonNumeri" onclick="mostra('9')">9</button>
+                </div>
+                <div class="col">
+                    <button id="divisione" onclick="mostra('/')">÷</button>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col">
+                    <button class="buttonNumeri" onclick="mostra('4')">4</button>
+                </div>
+                <div class="col">
+                    <button class="buttonNumeri" onclick="mostra('5')">5</button>
+                </div>
+                <div class="col">
+                    <button class="buttonNumeri" onclick="mostra('6')">6</button>
+                </div>
+                <div class="col">
+                    <button id="moltiplicazione" onclick="mostra('*')">×</button>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col">
+                    <button class="buttonNumeri" onclick="mostra('1')">1</button>
+                </div>
+                <div class="col">
+                    <button class="buttonNumeri" onclick="mostra('2')">2</button>
+                </div>
+                <div class="col">
+                    <button class="buttonNumeri" onclick="mostra('3')">3</button>
+                </div>
+                <div class="col">
+                    <button id="sottrazione" onclick="mostra('-')">-</button>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col">
+                    <button onclick="reset()" id="reset">C</button>
+                </div>
+                <div class="col">
+                    <button class="buttonNumeri" onclick="mostra('0')">0</button>
+                </div>
+                <div class="col">
+                    <button onclick="calcola()" id="uguale">=</button>
+                </div>
+                <div class="col">
+                    <button id="addizione" onclick="mostra('+')">+</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- javascript -->
+    <script>
+
+        //puntamento elementi tag per la manipolazione
+        var schermo = document.getElementById("schermo");
+        var espressione = document.getElementById("espressione");
+
+        // cliccando il bottone viene visualizzato il valore specificato, concatenandolo a quello già presente, il parametro numero è il valore del bottone cliccato che e' specificato nella funzione mostra() associata al bottone
+        function mostra(numero) {
+            espressione.innerHTML += numero;
+        }
+
+        // cliccando il bottone C il valore visualizzato viene resettato, svuotando il campo di testo
+        function reset() {
+            schermo.value = "";
+            espressione.innerHTML = "";
+        }
+
+        // Controllo se ci sono due o più caratteri speciali consecutivi
+        function validaEspressione() {
+            var regex = /[\+\-\*\/]{2,}/;
+            if (regex.test(espressione.innerHTML)) {
+                throw new Error("Operazione non valida");
+            }
+        }
+
+        //funzione per calcolare il risultato, controllando che un valore diviso per 0 non sia possibile
+        function calcola() {
+            try {
+                // Controllo se l'espressione è valida
+                if (espressione.innerHTML === "") {
+                    throw new Error("Operazione non valida");
+                }
+
+                validaEspressione();
+
+                var risultato = eval(espressione.innerHTML); //eval() funzione che passando un espressione matematica come stringa la valuta e restituisce il risultato
+
+                // Controllo se il risultato è Infinity (divisione per zero)
+                if (risultato === Infinity) {
+                    throw new Error("Operazione non valida");
+                }
+
+                // Visualizzo il risultato
+                schermo.value = risultato;
+            }
+            catch (error) {
+                alert("Operazione non valida");
+                reset(); // Ripulisci tutti i dati
+            }
+        }
+    </script>
+
+</body>
+
+</html>
